@@ -1,5 +1,6 @@
 package de.rubixdev.rug.mixins;
 
+import carpet.fakes.WorldInterface;
 import de.rubixdev.rug.RugSettings;
 import de.rubixdev.rug.util.FluidHelper;
 
@@ -32,16 +33,6 @@ public abstract class WorldMixin {
 
     @Shadow
     public abstract boolean setBlockState(BlockPos pos, BlockState state, int flags, int maxUpdateDepth);
-
-    // Compatibility with `movableBlockEntities` from Carpet. See /src/main/java/carpet/mixins/World_movableTEMixin.java
-    @SuppressWarnings("MixinAnnotationTarget")
-    @Shadow(remap = false)
-    public abstract boolean setBlockStateWithBlockEntity(
-        BlockPos blockPos_1,
-        BlockState blockState_1,
-        BlockEntity newBlockEntity,
-        int int_1
-    );
 
     private boolean shouldOverwrite;
     private boolean lowerWasFirst;
@@ -137,7 +128,7 @@ public abstract class WorldMixin {
                     1.0F
                 );
                 cir.setReturnValue(
-                    this.setBlockStateWithBlockEntity(pos, Blocks.LAVA.getDefaultState(), newBlockEntity, flags)
+                        ((WorldInterface) (this)).setBlockStateWithBlockEntity(pos, Blocks.LAVA.getDefaultState(), newBlockEntity, flags)
                 );
             }
         }
